@@ -1,8 +1,14 @@
 var http = require('http');
-var port = 8080; 
+var port = 8080;
 
 var requestHandler = function(request, response) {
+  if (request.method === 'GET' && request.url === '/listings')
+  {
+    response.statusCode = 404;
+    response.end("Bad gateway error");
+  }
   response.end('Request received!');
+
 };
 
 // a server is created, but not started
