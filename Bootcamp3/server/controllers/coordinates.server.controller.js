@@ -15,6 +15,8 @@ module.exports = function(req, res, next) {
     var options = { 
       q: addressTemp4,
       key: config.openCage.key,  
+      limit: 1,
+      no_annotations: 1,
     }
 
     //Setup your request using URL and options - see ? for format
@@ -23,8 +25,11 @@ module.exports = function(req, res, next) {
       qs: options
       }, function(error, response, body) {
         //For ideas about response and error processing see https://opencagedata.com/tutorials/geocode-in-nodejs
-        
         //JSON.parse to get contents. Remember to look at the response's JSON format in open cage data
+        if (error) throw error
+        
+        var data = JSON.parse(body);
+        req.results = data.results[0].geometry;
         
         /*Save the coordinates in req.results -> 
           this information will be accessed by listings.server.model.js 

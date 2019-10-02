@@ -90,7 +90,7 @@ describe('Listings CRUD tests', function() {
         done();
       });
   });
-
+  
   it('should be able to delete a listing', function(done) {
     agent.delete('/api/listings/' + id)
       .expect(200)

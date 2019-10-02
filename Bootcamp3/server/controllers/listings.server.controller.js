@@ -57,25 +57,51 @@ exports.read = function(req, res) {
 exports.update = function(req, res) {
   var listing = req.listing;
 
+  var query = {code: listing.code};
   /* Replace the listings's properties with the new properties found in req.body */
- 
+  listing.code = req.body.code;
+  listing.name = req.body.name;
+  listing.address = req.body.address;
+  
   /*save the coordinates (located in req.results if there is an address property) */
- 
-  /* Save the listing */
+  if(req.results) {
+    listing.coordinates = {
+      latitude: req.results.lat, 
+      longitude: req.results.lng
+    };
+  }
 
-};
+  /* Save the listing */
+  Listing.findOneAndUpdate(query, listing, function(err) {
+    if(err) {
+      console.log(err);
+      res.status(400).send(err);
+    } else {
+      res.json(listing);
+      console.log(listing)
+    }
+  });
+};  
 
 /* Delete a listing */
 exports.delete = function(req, res) {
   var listing = req.listing;
-
+  var query2 = {code: listing.code};
   /* Add your code to remove the listins */
-
+  Listing.findOneAndDelete(query2, function(err) {
+    if (err) throw err;
+    res.send({message: "Deleted"});
+  });
 };
 
 /* Retreive all the directory listings, sorted alphabetically by listing code */
 exports.list = function(req, res) {
-  /* Add your code */
+
+  Listing.find({}, function(err, foundListing) {
+    if (err) throw err;
+
+    res.send(foundListing);
+  });
 };
 
 /* 
