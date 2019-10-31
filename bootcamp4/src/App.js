@@ -3,13 +3,16 @@ import Search from './components/Search';
 import ViewBuilding from './components/ViewBuilding';
 import BuildingList from './components/BuildingList';
 import Credit from './components/Credit';
+import RemoveBuilding from './components/RemoveBuilding';
+import AddBuilding from './components/AddBuilding';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       filterText: '',
-      selectedBuilding: 1
+      selectedBuilding: 1,
+      data: this.props.data
     };
   }
 
@@ -25,6 +28,22 @@ class App extends React.Component {
     this.setState({
       selectedBuilding: id
     })
+  }
+
+  //Removes building
+  deleteBuilding(id) {
+    console.log(id)
+    const newData = this.state.data.filter(data => {return data.id !== id});
+    const newBuildingID = 1;
+    this.setState({
+        data: newData,
+        selectedBuilding: newBuildingID
+    })
+  }
+
+  //Adds building to state
+  createBuilding(building) {
+
   }
 
   render() {
@@ -50,7 +69,7 @@ class App extends React.Component {
                     </td>
                   </tr>
                   <BuildingList
-                    data={this.props.data}
+                    data={this.state.data}
                     selectedUpdate={this.selectedUpdate.bind(this)}
                     filterText={this.state.filterText}
                   />
@@ -60,7 +79,14 @@ class App extends React.Component {
             <div className="column2">
               <ViewBuilding 
                 selectedBuilding={this.state.selectedBuilding}
-                data={this.props.data}
+                data={this.state.data}
+              />
+              <RemoveBuilding
+                selectedBuilding={this.state.selectedBuilding}
+                deleteBuilding={this.deleteBuilding.bind(this)}
+              />
+              <AddBuilding
+                createBuilding={this.createBuilding.bind(this)}
               />
             </div>
           </div>
