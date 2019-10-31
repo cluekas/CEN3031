@@ -32,7 +32,6 @@ class App extends React.Component {
 
   //Removes building
   deleteBuilding(id) {
-    console.log(id)
     const newData = this.state.data.filter(data => {return data.id !== id});
     const newBuildingID = 1;
     this.setState({
@@ -44,6 +43,13 @@ class App extends React.Component {
   //Adds building to state
   createBuilding(building) {
 
+    const newData = this.state.data
+    // Finds the highest available id then adds one
+    building.id = newData.reduce((max, newData) => newData.id > max ? newData.id : max, newData[0].id) + 1
+    newData.push(building)
+    this.setState({
+      data: newData
+    })
   }
 
   render() {
